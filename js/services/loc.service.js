@@ -1,12 +1,24 @@
 export const locService = {
-    getLocs
+    getLocs,
+    creatLoc
+}
+let gId = 101
+
+const locs = []
+
+
+function creatLoc(placeName, pos) {
+    let loc = {
+        id: gId++,
+        placeName,
+        pos,
+        createdAt: Date.now(),
+        updatedAt: Date.now(),
+    }
+    locs.push(loc)
+    console.log(locs);
 }
 
-
-const locs = [
-    { name: 'Greatplace', lat: 32.047104, lng: 34.832384 }, 
-    { name: 'Neveragain', lat: 32.047201, lng: 34.832581 }
-]
 
 function getLocs() {
     return new Promise((resolve, reject) => {
