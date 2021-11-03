@@ -14,13 +14,18 @@ var locs = []
 
 
 function creatLoc(placeName, pos) {
-
+    var today = new Date()
+    var date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
+    var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
+    console.log(date +time);
+    
+    
     let loc = {
         id: makeId(),
         placeName,
         pos,
-        createdAt: Date.now(),
-        updatedAt: Date.now(),
+        createdAt: date +' '+ time,
+        updatedAt: date +' '+ time,
     }
     locs = getFromStorage() || []
     console.log(locs);

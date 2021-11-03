@@ -2,22 +2,24 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>TravelTip</title>
+    <link rel="stylesheet" href="css/style.css" />
 </head>
 
 <body>
-    <h1>TravelTip Starter!!</h1>
-    <input class="place-input" onchange="searchPlace(this.value)" type="text">
+    <header class="main-layout">
+        <h1>TravelTip</h1>
+        <input class="place-input" onchange="searchPlace(this.value)" type="text" placeholder="search" />
+        <button onclick="onGetUserPos()" class="btn-user-pos">
+            Get User Position
+        </button>
+    </header>
 
-    <div id="map" style="width: 100%; height: 400px;"></div>
-    <button onclick="onGetUserPos()" class="btn-user-pos">Get User Position</button>
-    <p>You are at: <span class="user-pos"></span></p>
-    <p>Locations: <span class="locs"></span></p>
-    <div class="table-locs"></div>
-<div class="Wether"></div>
-
+    <div id="map" style="width: 50%; height: 500px" class="map main-layout"></div>
+    <div class="table-locs main-layout"></div>
+    <div class="Wether  main-layout"></div>
 
     <script src="lib/swal.js"></script>
     <script src="lib/axios.js"></script>

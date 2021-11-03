@@ -1,0 +1,86 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+}
+
+header {
+  display: flex;
+  align-items: center;
+  text-align: center;
+  justify-content: center;
+  justify-content: space-around;
+}
+
+.main-layout {
+  margin-left: 50px;
+  margin-right: 50px;
+}
+
+.btn-user-pos {
+  /* margin-inline-start: 15%; */
+  height: 30px;
+  border-radius: 10px;
+  border: none;
+}
+
+input {
+  /* margin-inline-end: 12%; */
+  height: 40px;
+  width: 300px;
+  border-radius: 10px;
+}
+
+.map {
+  float: right;
+}
+
+h1 {
+  /* margin-inline-end: 30%; */
+  font-size: 3rem;
+}
+
+.table-locs {
+  gap: 20px;
+  display: grid;
+  grid-template-areas: "card-loc card-loc ";
+}
+
+.card-loc {
+  background-color: rgb(209, 243, 255);
+  align-items: center;
+  flex-wrap: wrap;
+  display: flex;
+  flex-direction: column;
+  border-radius: 200px;
+  text-decoration: none;
+  width: 300px;
+  padding: 15px;
+}
+
+.card-loc button {
+  margin-bottom: 5px;
+  justify-content: center;
+  width: 80px;
+}
+
+li {
+  list-style: none;
+}
+
+.Wether {
+    float: right;
+  font-size: 1.2rem;
+  background-position: right;
+  background-image: url(/img/pinpng.com-weather-icons-png-transparent-6916187.png);
+  /* background-position: center; */
+  background-repeat: no-repeat;
+  background-size: 150px;
+  border-radius: 100px;
+  /* margin-top: 20px; */
+  border: 1px solid black;
+  width: 450px;
+  height: 220px;
+}

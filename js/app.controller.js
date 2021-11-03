@@ -56,9 +56,9 @@ function onGetUserPos() {
     getPosition()
         .then(pos => {
             console.log('User position is:', pos.coords);
-            document.querySelector('.user-pos').innerText =
-                `Latitude: ${pos.coords.latitude} - Longitude: ${pos.coords.longitude}`
-            onPanTo({ lat: pos.coords.latitude, lng: pos.coords.longitude })
+            // document.querySelector('.user-pos').innerText =
+                // `Latitude: ${pos.coords.latitude} - Longitude: ${pos.coords.longitude}`
+            onPanTo(  pos.coords.latitude,pos.coords.longitude )
         })
         .catch(err => {
             console.log('err!!!', err);
@@ -140,12 +140,10 @@ function renderTable(locs) {
         return `
         <div class="card-loc">
     <ul>
-    <li>${loc.id}</li>
-    <li>Place name:${loc.placeName}</li>
+    <li>Place name: ${loc.placeName}</li>
     <li>Lat: ${loc.pos.lat}</li>
     <li>Lng: ${loc.pos.lng}</li>
     <li>Created At:  ${loc.createdAt}</li>
-    <li>Updated At: ${loc.updatedAt}</li>   
     </ul>
     <button onclick="onPanTo('${loc.pos.lat}', '${loc.pos.lng}')" class="go-loc">GO</button>
     <button onclick="onDeleteLoc('${loc.id}')" class="delete-card">Delete</button>    
@@ -158,7 +156,7 @@ function renderWether(res) {
     console.log(res);
     var strHtml = `
 <ul>
-    <h1>country: ${res.data.sys.country}</h1>
+    <h2>country: ${res.data.sys.country}</h2>
     <li>name place: ${res.data.name}</li>
     <li>description: ${res.data.weather[0].description}</li>
     <li>wind: ${res.data.wind.speed}</li>
@@ -169,3 +167,6 @@ function renderWether(res) {
 function onDeleteLoc(id) {
     locService.deleteLoc(id)
 }
+
+
+  
