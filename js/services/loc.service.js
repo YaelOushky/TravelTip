@@ -9,22 +9,25 @@ export const locService = {
 
 const KEY = 'location'
 let gId = 101
-const locs = []
+var locs = []
 
 
 function creatLoc(placeName, pos) {
+
     let loc = {
-        id: gId++,
+        id: makeId(),
         placeName,
         pos,
         createdAt: Date.now(),
         updatedAt: Date.now(),
     }
+    locs = getFromStorage() || []
+    console.log(locs);
     locs.push(loc)
 
-    locs[[locs.length - 1].id] = loc
-    // console.log();
+    // locs[[locs.length - 1].id] = loc
     storageService.save(KEY, locs)
+    console.log(locs);
     mapController.renderTable(locs)
 }
 
@@ -39,4 +42,15 @@ function getLocs() {
 
 function getFromStorage() {
     return storageService.load(KEY)
+}
+
+
+
+function makeId(length = 3) {
+    var txt = '';
+    var possible = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    for (var i = 0; i < length; i++) {
+        txt += possible.charAt(Math.floor(Math.random() * possible.length));
+    }
+    return txt;
 }

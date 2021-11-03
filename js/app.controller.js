@@ -13,6 +13,7 @@ window.onPanTo = onPanTo;
 window.onGetLocs = onGetLocs;
 window.onGetUserPos = onGetUserPos;
 window.searchPlace = searchPlace;
+// window.onDeleteLoc = onDeleteLoc;
 
 var gMap = mapService.getGmap;
 var gLocs = locService.getLocs();
@@ -25,7 +26,7 @@ function onInit() {
     mapService.initMap()
         .then(() => {
             console.log('Map is ready');
-            let locs = locService.getFromStorage() || {}
+            let locs = locService.getFromStorage() || []
             console.log(locs);
             renderTable(locs)
         })
@@ -64,9 +65,11 @@ function onGetUserPos() {
             console.log('err!!!', err);
         })
 }
-function onPanTo() {
+
+function onPanTo(lat, lng) {
+    console.log(lat, lng);
     console.log('Panning the Map');
-    mapService.panTo(35.6895, 139.6917);
+    mapService.panTo(lat, lng);
 }
 
 function searchPlace(place) {
@@ -125,7 +128,10 @@ function renderTable(locs) {
     <li>Lng: ${loc.pos.lng}</li>
     <li>Created At:  ${loc.createdAt}</li>
     <li>Updated At: ${loc.updatedAt}</li>   
-    </ul></div>`
+    </ul>
+    <button onclick="onPanTo(' ${loc.pos.lat}', '${loc.pos.lng}')" class="go-loc">GO</button>
+    <button onclick="onDeleteLoc()" class="delete-card">Delete</button>    
+        </div>`
     }).join('')
     document.querySelector('.table-locs').innerHTML = strHtml
 
