@@ -21,8 +21,6 @@ var gLocs = locService.getLocs();
 
 
 
-
-
 function onInit() {
     mapService.initMap()
         .then(() => {
