@@ -26,9 +26,7 @@ var gLocs = locService.getLocs();
 function onInit() {
     mapService.initMap()
         .then(() => {
-            console.log('Map is ready');
             let locs = locService.getFromStorage() || []
-            console.log(locs);
             renderTable(locs)
         })
         .catch(() => console.log('Error: cannot init map'));
@@ -36,14 +34,12 @@ function onInit() {
 
 // This function provides a Promise API to the callback-based-api of getCurrentPosition
 function getPosition() {
-    console.log('Getting Pos');
     return new Promise((resolve, reject) => {
         navigator.geolocation.getCurrentPosition(resolve, reject)
     })
 }
 
 function onAddMarker(pos) {
-    console.log('Adding a marker');
     mapService.addMarker(pos);
 }
 
@@ -52,7 +48,7 @@ function onGetLocs() {
     locService.getLocs()
         .then(locs => {
             console.log('Locations:', locs)
-            document.querySelector('.locs').innerText = JSON.stringify(locs)
+            document.querySelector('.locs').innerText = JSON.stringify(locs.placeName)
         })
 }
 
@@ -62,6 +58,7 @@ function onGetUserPos() {
             console.log('User position is:', pos.coords);
             document.querySelector('.user-pos').innerText =
                 `Latitude: ${pos.coords.latitude} - Longitude: ${pos.coords.longitude}`
+            onPanTo({ lat: pos.coords.latitude, lng: pos.coords.longitude })
         })
         .catch(err => {
             console.log('err!!!', err);
@@ -72,17 +69,32 @@ function onPanTo(lat, lng) {
     console.log(lat, lng);
     console.log('Panning the Map');
     mapService.panTo(lat, lng);
+    searchWether(lat, lng)
 }
 
 function searchPlace(place) {
     const prm = axios.get(`https://maps.googleapis.com/maps/api/geocode/json?address=${place}&key=AIzaSyCFnIgowG2QtJGmDQEiZIFnIBO8WTGwiOQ`)
         .then(res => {
-            console.log('Axios Res:', res.data.results[0].geometry.location);
-            onPanTo(res.data.results[0].geometry.location)
+            console.log('Axios Res:', res);
+            onPanTo(res.data.results[0].geometry.location.lat,res.data.results[0].geometry.location.lng )
         })
         .catch(err => {
             console.log('Had issues talking to server', err);
         })
+
+}
+// searchWether({ lat: 29.526009, lng: 34.937586 })
+function searchWether(lat,lng) {
+    console.log(lat,lng);
+    const prm = axios.get(`http://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lng}&APPID=fe6f1ecc454aff357abf6825e48cf1f7`)
+        .then(res => {
+            console.log('Axios Res:', res);
+            renderWether(res)
+        })
+        .catch(err => {
+            console.log('Had issues talking to server', err);
+        })
+    console.log(prm);
 }
 
 
@@ -98,7 +110,6 @@ function openModal(pos) {
     })
     prmUserAns.then((userAns) => {
         if (userAns.isConfirmed) {
-            // Swal.fire('Saved!', '', 'success')
             saveLocation(pos)
         } else if (userAns.isDenied) {
             Swal.fire('Place not saved', '', 'info')
@@ -119,13 +130,11 @@ function saveLocation(pos) {
         preConfirm: (placeName) => {
             console.log(placeName);
             locService.creatLoc(placeName, pos)
-
         }
     })
 }
 
 function renderTable(locs) {
-    console.log(locs);
     let strHtml = locs.map(loc => {
         onAddMarker(loc.pos)
         return `
@@ -138,12 +147,23 @@ function renderTable(locs) {
     <li>Created At:  ${loc.createdAt}</li>
     <li>Updated At: ${loc.updatedAt}</li>   
     </ul>
-    <button onclick="onPanTo(' ${loc.pos.lat}', '${loc.pos.lng}')" class="go-loc">GO</button>
+    <button onclick="onPanTo('${loc.pos.lat}', '${loc.pos.lng}')" class="go-loc">GO</button>
     <button onclick="onDeleteLoc('${loc.id}')" class="delete-card">Delete</button>    
         </div>`
     }).join('')
     document.querySelector('.table-locs').innerHTML = strHtml
+}
 
+function renderWether(res) {
+    console.log(res);
+    var strHtml = `
+<ul>
+    <h1>country: ${res.data.sys.country}</h1>
+    <li>name place: ${res.data.name}</li>
+    <li>description: ${res.data.weather[0].description}</li>
+    <li>wind: ${res.data.wind.speed}</li>
+</ul>`
+    document.querySelector('.Wether').innerHTML = strHtml
 }
 
 function onDeleteLoc(id) {

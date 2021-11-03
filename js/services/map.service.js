@@ -1,5 +1,6 @@
-
-import { mapController } from '../app.controller.js'
+import {
+    mapController
+} from '../app.controller.js'
 export const mapService = {
     initMap,
     addMarker,
@@ -14,16 +15,16 @@ function getGmap() {
 }
 
 function initMap(lat = 32.0749831, lng = 34.9120554) {
-    console.log('InitMap');
     return _connectGoogleApi()
         .then(() => {
-            console.log('google available');
             gMap = new google.maps.Map(
                 document.querySelector('#map'), {
-                center: { lat, lng },
-                zoom: 15
-            })
-            console.log('Map!', gMap);
+                    center: {
+                        lat,
+                        lng
+                    },
+                    zoom: 15
+                })
         })
         .then(() => {
             let infoWindow = new google.maps.InfoWindow({
@@ -36,7 +37,7 @@ function initMap(lat = 32.0749831, lng = 34.9120554) {
                 infoWindow.close();
                 // Create a new InfoWindow.
                 let clickedPos = mapsMouseEvent.latLng.toJSON();
-                
+
                 mapController.openModal(clickedPos)
                 infoWindow = new google.maps.InfoWindow({
                     // position: mapsMouseEvent.latLng,
@@ -64,7 +65,7 @@ function addMarker(loc) {
 }
 
 function panTo(lat, lng) {
-    
+
     var laLatLng = new google.maps.LatLng(lat, lng);
     gMap.panTo(laLatLng);
 }
@@ -84,5 +85,3 @@ function _connectGoogleApi() {
         elGoogleApi.onerror = () => reject('Google script failed to load')
     })
 }
-
-
