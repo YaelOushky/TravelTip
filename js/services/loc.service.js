@@ -1,3 +1,5 @@
+import { mapController } from '../app.controller.js'
+
 export const locService = {
     getLocs,
     creatLoc
@@ -16,7 +18,7 @@ function creatLoc(placeName, pos) {
         updatedAt: Date.now(),
     }
     locs.push(loc)
-    console.log(locs);
+    mapController.renderTable(locs)
 }
 
 
@@ -27,5 +29,4 @@ function getLocs() {
         }, 2000)
     });
 }
-
 

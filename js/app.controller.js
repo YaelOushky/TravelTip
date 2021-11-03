@@ -1,7 +1,8 @@
 import { locService } from './services/loc.service.js'
 import { mapService } from './services/map.service.js'
 export const mapController = {
-    openModal
+    openModal,
+    renderTable
 }
 
 
@@ -13,6 +14,7 @@ window.onGetUserPos = onGetUserPos;
 window.searchPlace = searchPlace;
 
 var gMap = mapService.getGmap;
+var gLocs = locService.getLocs();
 
 
 function onInit() {
@@ -31,9 +33,9 @@ function getPosition() {
     })
 }
 
-function onAddMarker() {
+function onAddMarker(pos) {
     console.log('Adding a marker');
-    mapService.addMarker({ lat: 32.0749831, lng: 34.9120554 });
+    mapService.addMarker(pos);
 }
 
 function onGetLocs() {
@@ -78,7 +80,7 @@ function openModal(pos) {
     prmUserAns.then((userAns) => {
         if (userAns.isConfirmed) {
             // Swal.fire('Saved!', '', 'success')
-            saveLocation(pos)
+            saveLocation(pos)           
         } else if (userAns.isDenied) {
             Swal.fire('Place not saved', '', 'info')
         }
@@ -98,6 +100,26 @@ function saveLocation(pos) {
         preConfirm: (placeName) => {
             console.log(placeName);
             locService.creatLoc(placeName, pos)
+            
         }
     })
+}
+
+function renderTable(locs) {
+    console.log(locs);
+    let strHtml = locs.map(loc => {
+        onAddMarker(loc.pos)
+        return `
+        <div class="card-loc">
+    <ul>
+    <li>${loc.id}</li>
+    <li>Place name:${loc.placeName}</li>
+    <li>Lat: ${loc.pos.lat}</li>
+    <li>Lng: ${loc.pos.lng}</li>
+    <li>Created At:  ${loc.createdAt}</li>
+    <li>Updated At: ${loc.updatedAt}</li>   
+    </ul></div>`
+    }).join('')
+    document.querySelector('.table-locs').innerHTML = strHtml
+
 }
