@@ -1,11 +1,14 @@
 import { mapController } from '../app.controller.js'
+import { storageService } from './storage-service.js'
 
 export const locService = {
     getLocs,
-    creatLoc
+    creatLoc,
+    getFromStorage,
 }
-let gId = 101
 
+const KEY = 'location'
+let gId = 101
 const locs = []
 
 
@@ -18,6 +21,10 @@ function creatLoc(placeName, pos) {
         updatedAt: Date.now(),
     }
     locs.push(loc)
+
+    locs[[locs.length - 1].id] = loc
+    // console.log();
+    storageService.save(KEY, locs)
     mapController.renderTable(locs)
 }
 
@@ -30,3 +37,6 @@ function getLocs() {
     });
 }
 
+function getFromStorage() {
+    return storageService.load(KEY)
+}

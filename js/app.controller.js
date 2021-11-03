@@ -1,5 +1,6 @@
 import { locService } from './services/loc.service.js'
 import { mapService } from './services/map.service.js'
+
 export const mapController = {
     openModal,
     renderTable
@@ -17,10 +18,16 @@ var gMap = mapService.getGmap;
 var gLocs = locService.getLocs();
 
 
+
+
+
 function onInit() {
     mapService.initMap()
         .then(() => {
             console.log('Map is ready');
+            let locs = locService.getFromStorage() || {}
+            console.log(locs);
+            renderTable(locs)
         })
         .catch(() => console.log('Error: cannot init map'));
 }
@@ -80,7 +87,7 @@ function openModal(pos) {
     prmUserAns.then((userAns) => {
         if (userAns.isConfirmed) {
             // Swal.fire('Saved!', '', 'success')
-            saveLocation(pos)           
+            saveLocation(pos)
         } else if (userAns.isDenied) {
             Swal.fire('Place not saved', '', 'info')
         }
@@ -100,7 +107,7 @@ function saveLocation(pos) {
         preConfirm: (placeName) => {
             console.log(placeName);
             locService.creatLoc(placeName, pos)
-            
+
         }
     })
 }
